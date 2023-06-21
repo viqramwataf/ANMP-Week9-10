@@ -12,9 +12,15 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.example.todoapp.R
 import com.example.todoapp.model.Todo
+import com.example.todoapp.util.NotificationHelper
+import com.example.todoapp.util.TodoWorker
 import com.example.todoapp.viewmodel.DetailTodoViewModel
+import java.util.concurrent.TimeUnit
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,7 +47,17 @@ class CreateTodoFragment : Fragment() {
             ViewModelProvider(this).get(DetailTodoViewModel::class.java)
 
         val btnAdd = view.findViewById<Button>(R.id.btnAdd)
+
         btnAdd.setOnClickListener {
+            val myWorkRequest = OneTimeWorkRequestBuilder<TodoWorker>()
+                .setInitialDelay(3, TimeUnit.SECONDS)
+                .setInputData(
+                    workDataOf(
+                        "title" to "Todo Created",
+                        "message" to "A new todo has been created! Stay focus!"
+                    )
+                ).build()
+
             val txtTitle = view.findViewById<EditText>(R.id.txtToDoTitle)
             val txtNotes = view.findViewById<EditText>(R.id.txtToDoNotes)
             val radPriority = view.findViewById<RadioGroup>(R.id.radioGPriority)
@@ -50,6 +66,7 @@ class CreateTodoFragment : Fragment() {
             val list = listOf(todo)
             viewModel.addTodo(list)
             Toast.makeText(view.context, "Data added", Toast.LENGTH_LONG).show()
+            WorkManager.getInstance(requireContext()).enqueue(myWorkRequest)
             Navigation.findNavController(it).popBackStack()
         }
 
