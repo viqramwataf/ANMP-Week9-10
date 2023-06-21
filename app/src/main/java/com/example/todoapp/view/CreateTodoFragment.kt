@@ -10,12 +10,14 @@ import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.example.todoapp.R
+import com.example.todoapp.databinding.FragmentCreateTodoBinding
 import com.example.todoapp.model.Todo
 import com.example.todoapp.util.NotificationHelper
 import com.example.todoapp.util.TodoWorker
@@ -32,22 +34,26 @@ private const val ARG_PARAM2 = "param2"
  * Use the [CreateTodoFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class CreateTodoFragment : Fragment() {
+class CreateTodoFragment : Fragment(), TodoCreateLayoutInterface {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_todo, container, false)
+        dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_todo, container, false)
+        return dataBinding.root
     }
     private lateinit var viewModel: DetailTodoViewModel
+    private lateinit var dataBinding: FragmentCreateTodoBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel =
             ViewModelProvider(this).get(DetailTodoViewModel::class.java)
+        dataBinding.todo = Todo("", "", 3)
+        dataBinding.radiolistener = this
+        dataBinding.buttonlistener = this
 
+/*
         val btnAdd = view.findViewById<Button>(R.id.btnAdd)
-
         btnAdd.setOnClickListener {
             val myWorkRequest = OneTimeWorkRequestBuilder<TodoWorker>()
                 .setInitialDelay(3, TimeUnit.SECONDS)
@@ -69,6 +75,15 @@ class CreateTodoFragment : Fragment() {
             WorkManager.getInstance(requireContext()).enqueue(myWorkRequest)
             Navigation.findNavController(it).popBackStack()
         }
+        */
+
+    }
+
+    override fun onRadioClick(v: View, priority: Int, obj: Todo) {
+
+    }
+
+    override fun onButtonAddClick(v: View) {
 
     }
 
