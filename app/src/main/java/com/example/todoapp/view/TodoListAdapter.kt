@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.ImageView
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.R
@@ -19,8 +20,7 @@ class TodoListAdapter(val todoList:ArrayList<Todo>,
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
             TodoListViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-
-        val view = TodoItemLayoutBinding.inflate(inflater, parent, false)
+        val view = DataBindingUtil.inflate<TodoItemLayoutBinding>(inflater,R.layout.todo_item_layout,parent,false)
         return TodoListViewHolder(view)
     }
 

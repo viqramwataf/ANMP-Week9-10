@@ -12,6 +12,8 @@ data class Todo(
     var notes: String,
     @ColumnInfo(name="priority")
     var priority: Int,
+    @ColumnInfo("is_done")
+    var isDone:Boolean,
 ){
     @PrimaryKey(autoGenerate = true)
     var uuid:Int = 0

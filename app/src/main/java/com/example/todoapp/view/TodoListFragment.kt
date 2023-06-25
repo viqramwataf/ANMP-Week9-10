@@ -30,7 +30,7 @@ class TodoListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(TodoListViewModel::class.java)
+        viewModel = ViewModelProvider(this)[TodoListViewModel::class.java]
         viewModel.refresh()
         var recViewTodo = view.findViewById<RecyclerView>(R.id.recViewTodo)
         recViewTodo.layoutManager = LinearLayoutManager(context)
@@ -55,6 +55,4 @@ class TodoListFragment : Fragment() {
             }
         })
     }
-
-
 }

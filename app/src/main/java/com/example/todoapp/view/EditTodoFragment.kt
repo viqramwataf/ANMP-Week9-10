@@ -40,10 +40,8 @@ class EditTodoFragment : Fragment() {
     private lateinit var viewModel:DetailTodoViewModel
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(DetailTodoViewModel::class.java)
+        viewModel = ViewModelProvider(this)[DetailTodoViewModel::class.java]
         val uuid = EditTodoFragmentArgs.fromBundle(requireArguments()).uuid
-        viewModel.fetchTodo(uuid)
-        observeViewModel()
         val btnAdd = view.findViewById<Button>(R.id.btnAdd)
         btnAdd.text = "Save Edited Todo"
         btnAdd.setOnClickListener {
@@ -51,13 +49,12 @@ class EditTodoFragment : Fragment() {
             val txtNotes = view.findViewById<EditText>(R.id.txtToDoNotes)
             val radPriority = view.findViewById<RadioGroup>(R.id.radioGPriority)
             val radio = view.findViewById<RadioButton>(radPriority.checkedRadioButtonId)
-            var todo = Todo(txtTitle.text.toString(), txtNotes.text.toString(), radio.tag.toString().toInt())
-            val list = listOf(todo)
-            Log.d("hello", radio.tag.toString())
             viewModel.updateTodo(txtTitle.text.toString(), txtNotes.text.toString(), radio.tag.toString().toInt(), uuid)
             Toast.makeText(view.context, "Data edited", Toast.LENGTH_LONG).show()
             Navigation.findNavController(it).popBackStack()
         }
+        viewModel.fetchTodo(uuid)
+        observeViewModel()
     }
 
     fun observeViewModel(){

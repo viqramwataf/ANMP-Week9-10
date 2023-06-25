@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
 import com.example.todoapp.model.Todo
 import com.example.todoapp.model.TodoDatabase
-import com.example.todoapp.util.buildDB
+import com.example.todoapp.util.buildDb
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -19,21 +19,21 @@ class DetailTodoViewModel(application: Application)
     val todoLD = MutableLiveData<Todo>()
     fun addTodo(list: List<Todo>) {
         launch {
-            val db = buildDB(getApplication())
+            val db = buildDb(getApplication())
             db.todoDao().insertAll(*list.toTypedArray())
         }
     }
 
     fun fetchTodo(uuid:Int){
         launch {
-            val db = buildDB(getApplication())
+            val db = buildDb(getApplication())
             todoLD.postValue(db.todoDao().selectTodo(uuid))
         }
     }
 
     fun updateTodo(title:String, notes:String, priority:Int, uuid: Int){
         launch {
-            val db = buildDB(getApplication())
+            val db = buildDb(getApplication())
             db.todoDao().updateTodo(title, notes, priority, uuid)
         }
     }
